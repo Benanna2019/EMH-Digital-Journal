@@ -1,4 +1,4 @@
-:root {
+/* :root {
 	--black: #101010;
 	--white: #eee;
 	--bg: light-dark(var(--white), var(--black));
@@ -27,4 +27,4 @@ body {
 	background: var(--bg);
 	color: var(--fg);
 	font-family: system-ui;
-}
+} */

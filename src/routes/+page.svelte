@@ -4,6 +4,10 @@
 	import { Replicache, type WriteTransaction } from 'replicache';
 	import { flip } from 'svelte/animate';
 
+	import HankoAuth from '$lib/components/Hanko/HankoAuth.svelte';
+	import ListDetailView from '$lib/components/Layout/ListDetailView.svelte';
+	import SiteLayout from '$lib/components/Layout/SiteLayout.svelte';
+
 	type Todo = {
 		id: number;
 		name: string;
@@ -12,6 +16,11 @@
 		updatedAt: string;
 		completed: boolean;
 	};
+
+	// Implement a very simple version of some of Brian Lovin's site
+	// Inject 'templates' for journals. Should probably just be markdown that can be edited
+	// Find Markdown renderer's for svelte
+	//
 
 	let todos: Todo[] = $state([]);
 	let form_state = $state({ name: '' });
@@ -67,44 +76,50 @@
 	}
 </script>
 
-<form method="POST" {onsubmit}>
-	<label for="name">Todo:</label>
-	<input type="text" name="name" id="name" bind:value={form_state.name} />
-	<button type="submit">+ Add</button>
-</form>
+<SiteLayout>
+	<ListDetailView list={null} hasDetail={false} {detail} />
+</SiteLayout>
 
-<ul>
-	{#each todos as todo (todo.id)}
-		<li animate:flip={{ duration: 200 }} class:completed={todo.completed}>
-			<span>
-				{todo.name}
-			</span>
-			<button class="check" onclick={() => toggle(todo)}>
-				<svg xmlns="http://www.w3.org/2000/svg" width="40px" height="100%" viewBox="0 0 32 32"
-					><title>c-check</title><g fill="var(--fg)" stroke-linejoin="miter" stroke-linecap="butt"
-						><circle
-							cx="16"
-							cy="16"
-							r="14"
-							fill="none"
-							stroke="var(--fg)"
-							stroke-linecap="square"
-							stroke-miterlimit="10"
-							stroke-width="2"
-						></circle><polyline
-							points="9 17 13 21.5 23 10"
-							fill="none"
-							stroke="var(--fg)"
-							stroke-linecap="square"
-							stroke-miterlimit="10"
-							stroke-width="2"
-						></polyline></g
-					></svg
-				>
-			</button>
-		</li>
-	{/each}
-</ul>
+{#snippet detail()}
+	<form method="POST" {onsubmit}>
+		<label for="name">Todo:</label>
+		<input type="text" name="name" id="name" bind:value={form_state.name} />
+		<button type="submit">+ Add</button>
+	</form>
+
+	<ul>
+		{#each todos as todo (todo.id)}
+			<li animate:flip={{ duration: 200 }} class:completed={todo.completed}>
+				<span>
+					{todo.name}
+				</span>
+				<button class="check" onclick={() => toggle(todo)}>
+					<svg xmlns="http://www.w3.org/2000/svg" width="40px" height="100%" viewBox="0 0 32 32"
+						><title>c-check</title><g fill="var(--fg)" stroke-linejoin="miter" stroke-linecap="butt"
+							><circle
+								cx="16"
+								cy="16"
+								r="14"
+								fill="none"
+								stroke="var(--fg)"
+								stroke-linecap="square"
+								stroke-miterlimit="10"
+								stroke-width="2"
+							></circle><polyline
+								points="9 17 13 21.5 23 10"
+								fill="none"
+								stroke="var(--fg)"
+								stroke-linecap="square"
+								stroke-miterlimit="10"
+								stroke-width="2"
+							></polyline></g
+						></svg
+					>
+				</button>
+			</li>
+		{/each}
+	</ul>
+{/snippet}
 
 <style>
 	label {

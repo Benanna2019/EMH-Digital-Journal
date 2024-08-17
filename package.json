@@ -12,25 +12,37 @@
 		"format": "prettier --write ."
 	},
 	"devDependencies": {
+		"@serwist/build": "^9.0.5",
+		"@serwist/vite": "^9.0.5",
+		"@serwist/window": "^9.0.5",
 		"@sveltejs/adapter-auto": "^3.0.0",
 		"@sveltejs/adapter-cloudflare": "^4.7.0",
 		"@sveltejs/kit": "^2.0.0",
 		"@sveltejs/vite-plugin-svelte": "^3.0.0",
+		"@tailwindcss/typography": "^0.5.14",
 		"@types/eslint": "^9.6.0",
+		"autoprefixer": "^10.4.20",
 		"eslint": "^9.0.0",
 		"eslint-config-prettier": "^9.1.0",
 		"eslint-plugin-svelte": "^2.36.0",
 		"globals": "^15.0.0",
 		"prettier": "^3.1.1",
 		"prettier-plugin-svelte": "^3.1.2",
+		"prettier-plugin-tailwindcss": "^0.6.5",
+		"serwist": "^9.0.5",
 		"svelte": "^5.0.0-next.1",
 		"svelte-check": "^3.6.0",
+		"tailwindcss": "^3.4.9",
 		"typescript": "^5.0.0",
 		"typescript-eslint": "^8.0.0-alpha.20",
 		"vite": "^5.0.3"
 	},
 	"type": "module",
 	"dependencies": {
-		"replicache": "^15.0.1"
+		"@teamhanko/hanko-elements": "^1.0.0",
+		"@xstate/store": "^2.1.0",
+		"jose": "^5.6.3",
+		"replicache": "^15.0.1",
+		"xstate": "^5.17.3"
 	}
 }
