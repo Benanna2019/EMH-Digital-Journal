@@ -1,5 +1,5 @@
 <script lang="ts">
-	import './app.css';
+	import "./app.css"
 	import { dev } from '$app/environment';
 	import { Replicache, type WriteTransaction } from 'replicache';
 	import { flip } from 'svelte/animate';
@@ -7,6 +7,9 @@
 	import HankoAuth from '$lib/components/Hanko/HankoAuth.svelte';
 	import ListDetailView from '$lib/components/Layout/ListDetailView.svelte';
 	import SiteLayout from '$lib/components/Layout/SiteLayout.svelte';
+	import ContentContainer from '$lib/components/ListDetail/Detail/ContentContainer.svelte';
+	import TitleBar  from '$lib/components/ListDetail/TitleBar.svelte';
+	import Container from '$lib/components/ListDetail/Detail/Container.svelte';
 
 	type Todo = {
 		id: number;
@@ -81,6 +84,17 @@
 </SiteLayout>
 
 {#snippet detail()}
+
+<Container>
+	<TitleBar
+	  magicTitle
+	  title="Home"
+	/>
+
+	<div class="p-4"></div>
+
+	<ContentContainer>
+	  <div class="pb-24 space-y-8 md:space-y-16">
 	<form method="POST" {onsubmit}>
 		<label for="name">Todo:</label>
 		<input type="text" name="name" id="name" bind:value={form_state.name} />
@@ -119,9 +133,12 @@
 			</li>
 		{/each}
 	</ul>
+	</div>
+</ContentContainer>
+</Container>
 {/snippet}
 
-<style>
+ <style>
 	label {
 		display: block;
 	}
@@ -186,4 +203,4 @@
 		display: flex;
 		align-items: center;
 	}
-</style>
+</style> 

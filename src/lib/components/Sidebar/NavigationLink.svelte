@@ -1,7 +1,5 @@
 <script lang="ts">
-	import type { GlobalNavigation } from '$lib/store/GlobalNavContext';
-	import { getContext } from 'svelte';
-	const { isOpen, toggle } = getContext<GlobalNavigation>('GlobalNavigation');
+	
 
 	type NavLink = {
 		link: {
@@ -17,6 +15,7 @@
 
 	const { link }: NavLink = $props();
 	const {
+		// sidebar = $bindable(false),
 		href,
 		label,
 		icon: Icon,
@@ -27,7 +26,10 @@
 	} = link;
 </script>
 
-<li class="flex items-stretch space-x-1" onclick={toggle}>
+<!-- pass the toggle function here from the sidebar component -->
+<!--  onclick={() => (navState.isOpen = !navState.isOpen)} -->
+
+<li class="flex items-stretch space-x-1">
 	<a
 		{href}
 		target={isExternal ? '_blank' : undefined}

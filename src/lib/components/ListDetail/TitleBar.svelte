@@ -1,11 +1,21 @@
 <script lang="ts">
-	import type { GlobalNavigation } from '$lib/store/GlobalNavContext';
+
+	import { MenuIcon, XIcon } from 'svelte-feather-icons'
 	import { getContext } from 'svelte';
-	import X from '../Icons/X.svelte';
-	import Menu from '../Icons/Menu.svelte';
-	const { isOpen, toggle } = getContext<GlobalNavigation>('GlobalNavigation');
+	import { type NavState } from '$lib/store/GlobalNavContext.svelte';
+
+  	const navState = getContext<NavState>("navState");
+
+  	const toggleNavStateOpen = () => {
+		navState.isOpen = !navState.isOpen
+		console.log("nav state in toggle", navState.isOpen)
+	}
+
+	console.log("nav state from title bar: ", navState.isOpen)
 
 	type Props = {
+		isOpen?: boolean;
+		toggleIsOpen?: () => void;
 		title: string;
 		globalMenu?: boolean;
 		backButton?: boolean;
@@ -19,8 +29,10 @@
 	};
 
 	let {
+		isOpen,
 		title,
 		globalMenu = true,
+		toggleIsOpen,
 		backButton = false,
 		backButtonHref = '',
 		magicTitle = false,
@@ -30,82 +42,72 @@
 		trailingAccessory = null,
 		children
 	}: Props = $props();
+
+	const darkMode = $state(false)
+	const offset = $state(200)
+	const opacity = $state(0)
+	const currentScrollOffset = $state(0)
+
 </script>
 
-<!-- onClick={() => setIsOpen(!isOpen)} -->
-<!-- <X size={16} class="text-primary" />
-                  <Menu size={16} class="text-primary" /> -->
 
-<!-- style={{
-          background: `rgba(${darkMode ? '50,50,50' : '255,255,255'},${
-            currentScrollOffset === 0
-              ? currentScrollOffset
-              : darkMode
-              ? currentScrollOffset + 0.5
-              : currentScrollOffset + 0.8
-          })`,
-          box-shadow: `0 1px 3px rgba(0,0,0,${currentScrollOffset})`,
-          minHeight: '48px',
-        }} -->
-
-<div
+<div style:background="`rgba(${darkMode ? '50,50,50' : '255,255,255'},${
+	  currentScrollOffset === 0
+		? currentScrollOffset
+		: darkMode
+		? currentScrollOffset + 0.5
+		: currentScrollOffset + 0.8
+	})`"
+	style:box-shadow="`0 1px 3px rgba(0,0,0,${currentScrollOffset})`"
+	style:min-height="48px"
+  
 	class="filter-blur sticky top-0 z-10 flex flex-col justify-center px-3 py-2 dark:border-b dark:border-gray-900"
 >
 	<div class="flex flex-none items-center justify-between">
-		<span class="flex items-center space-x-3">
-			{#if globalMenu}
+		<span class="flex items-center space-x-3 ">
 				<span
-					class="flex cursor-pointer items-center justify-center rounded-md p-2 hover:bg-gray-200 lg:hidden dark:hover:bg-gray-800"
+					aria-roledescription="Toggle menu"
+					role="button"
+					tabindex={0}
+					onclick={() => {
+						console.log('clicked')
+						// @ts-ignore
+						toggleNavStateOpen()
+					}}
+					onkeydown={() => {
+						console.log('keydown')
+						toggleIsOpen?.()
+					}}
+					class="flex cursor-pointer items-center justify-center rounded-md p-2 hover:bg-gray-200 lg:hidden"
 				>
-					{#if $isOpen}
-						<X on:click={toggle} />
+				<!-- For my future reference, when I was adding this component by itself initially -->
+				 <!-- Meaning I just had the sidebar component, this title bar would never show because the 'titlebar' -->
+				  <!-- That was apart of the sidebar would disappear --> 
+				   <!-- But now that the page component has a title bar, whenever the sidebar dissappears -->
+					<!-- the menu icon is there because there is still a page with a title bar mounted -->
+					{#if navState.isOpen}
+						<XIcon size="16" class="text-primary" />
 					{:else}
-						<svg
-							on:click={toggle}
-							xmlns="http://www.w3.org/2000/svg"
-							fill="currentColor"
-							viewBox="0 0 24 24"
-							stroke-width="1.5"
-							stroke="currentColor"
-							class="h-6 w-6 text-black"
-						>
-							<path
-								stroke-linecap="round"
-								stroke-linejoin="round"
-								d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
-							/>
-						</svg>
+						<MenuIcon size="16" class="text-primary" />
 					{/if}
 				</span>
-			{/if}
-
-			{#if backButton}
-				<a
-					href={backButtonHref}
-					class="text-primary flex items-center justify-center rounded-md p-2 hover:bg-gray-200 lg:hidden dark:hover:bg-gray-800"
-				>
-					<!-- <ArrowLeft size={16} class="text-primary" /> -->
-				</a>
-			{/if}
-
-			{#if leadingAccessory}
-				<div>{leadingAccessory}</div>
-			{/if}
 
 			<!-- Put magic title here -->
 			<!-- Use the scroll driven link below and check if this is the 'magic title' -->
 			<!-- https://scroll-driven-animations.style/demos/cover-to-fixed-header/css/ -->
-			<h2 class="text-primary line-clamp-1 transform-gpu text-sm font-bold">
+
+			<!-- style:transform="`{magicTitle ? translateY({offset}%) : ""}`" 
+				style:opacity="`{magicTitle ? {opacity} : ""}" -->
+			<h2 
+                class="text-primary dark:text-white line-clamp-1 transform-gpu text-sm font-bold {
+					magicTitle ? "translateY(" + offset + "%) opacity-" + opacity : ""
+				}">
 				{title}
 			</h2>
 		</span>
-
-		{#if trailingAccessory}
-			<div>{trailingAccessory}</div>
-		{/if}
 	</div>
 
-	<div>
+	<!-- <div>
 		{@render children()}
-	</div>
+	</div> -->
 </div>
