@@ -8,4 +8,6 @@
       ref={ref}
       class="text-primary font-sans text-2xl font-bold xl:text-3xl"
       {...props}
-    >{@html props.children()}</h1>
+    >
+    {@html props.children()}
+</h1>

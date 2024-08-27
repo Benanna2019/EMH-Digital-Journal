@@ -5,7 +5,7 @@
 	const hankoApi = import.meta.env.VITE_HANKO_API_URL;
 
 	const redirectAfterLogin = () => {
-		goto('/dashboard');
+		goto('/');
 	};
 
 	onMount(async () => {

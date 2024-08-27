@@ -189,7 +189,7 @@
 				position: absolute;
 				display: block;
 				height: 6px;
-				background: #333;
+				background: #f2f0f0;
 				top: 50%;
 				left: 0;
 				width: 100%;

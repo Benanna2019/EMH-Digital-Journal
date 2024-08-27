@@ -7,6 +7,7 @@
 
 	import { getContext } from 'svelte';
 	import { type NavState } from '$lib/store/GlobalNavContext.svelte';
+	import UserFooter from './UserFooter.svelte';
 
   	const navState = getContext<NavState>("navState");
 
@@ -27,9 +28,10 @@
 		 dark:border-gray-800 dark:bg-gray-900 lg:dark:bg-gray-900 "
 		
 >
-	<TitleBar  {scrollContainerRef} leadingAccessory={null} title="Brian Lovin" />
+	<TitleBar  {scrollContainerRef} leadingAccessory={null} title="EMH - Digital" />
 	<SidebarNavigation />
-	</nav>
+	<UserFooter />
+</nav>
 
 
 
