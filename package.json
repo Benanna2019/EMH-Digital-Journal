@@ -40,6 +40,7 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@instantdb/core": "^0.12.15-alpha.0",
 		"@tailwindcss/forms": "^0.5.7",
 		"@teamhanko/hanko-elements": "^1.0.0",
 		"@xstate/store": "^2.1.0",

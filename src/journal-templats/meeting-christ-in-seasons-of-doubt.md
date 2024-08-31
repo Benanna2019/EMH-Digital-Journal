@@ -6,41 +6,44 @@ prose-reading: John 6:22-69
 scripture-callout: Simon Peter answered, "Lord, to whom will we go? You have the words of eternal life we have come to believe and know that you are the holy one of God." - John 6:68-69
 ---
 
-Indeed, it was my desire to serve you well
-in this day, O God, but I have againt fallen
-short of your righteousnes in my thoughts,
-my intentions, my actions, and my 
-utterances. I have responded at times
-without grace. I have chosen sometimes 
-that which is unprofitable and which leads
-neither to my own flourishing nor to the
-proclamation of your glory. Forgive me,
-O King, for reasons both knwon and 
-unknown. Forgive me for the harms
-I have done this day, and for the goods
-I might have done but failed to do; 
-forgive me also for the constant condition
-of my heart, for the self-serving impules, 
-inclinations, and desires which stand me 
-every moment in need of a savior.
+I would that my heart was ever strong, O Lord,
+my faith always firm and unwavering,
+my thoughts unclouded,
+my devotion sincere,
+my vision clear.
 
-How graciously you receive my repentances.
-May the grace of your forgiveness,
-which blooms evergreen for all your children,
-work powerfully in me, changing me into
-a better image-bearer of Christ and
-more faithful servant of my king.
+But it is not always so.
+There are those other moments,
+as now,
+
+when I cannot sense you near,
+cannot hear you, see you, touch you--times
+when fear or depression or frustration 
+overwhlem,
+and I find no help or consolation,
+when the seawalls of my faith crumble
+and give way to inrushing tides of doubt.
+
+And so, Jesus, I do now the only thing
+I know to do.
+Here I drag my heavy heart again
+into this cleared and desolate space,
+to see if you will meet me in my place of doubt.
+
+For where else but to you might I flee 
+with my doubts? You alone have the 
+words of eternal life.
 
 Amen.
 
 
-- Consider those things--done or left undone--over which you feel convicted today. What self-serving impulses might have given rise to these transgressions? Allow time for your words to bring shape to your repentance.
+- Here in this place of doubt and raw emotion, what questions do you have for your Lord? What would you ask of Christ, in confidence that he is listening? What do you have to say? Be honest about your pain and confusion. What emotions do you need to give expression to, in order to heave the weight of your doubt over to the hands of your God? 
 
 
-- Consider the grace of the Lord in receiving your repentance. Do not pass lightly over his mercy, but take time to write of his forgiveness and how his kindness shapes your own.
+- Consider times in your life when your heart felt strong and your vision clear. Consider also other times of doubt, mapping out the seasons of your soul. Is there any pattern to the changes and variations? Listent to your life and the shape it has taken. Pay attention to where you are and where you have come from.
 
 
-- Reflect on the story of David's sin and his own "journaling" of repentance and forgiveness. What might you add to the entries above after reading his? 
+- Can you say honestly with Peter that there is no one else to whom you can go apart from Jesus? Why or why not? What does this say of your heart? 
 
 
 Responsive Prayer: 
