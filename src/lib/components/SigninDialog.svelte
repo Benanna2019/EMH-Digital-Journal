@@ -1,30 +1,30 @@
 <script lang="ts">
-	import type { Snippet } from "svelte";
+	import type { Snippet } from 'svelte';
 
-	let { showModal = $bindable(), header, children = $bindable() }: { showModal: boolean, header: Snippet, children: typeof $bindable } = $props(); // boolean
+	let {
+		showModal = $bindable(),
+		header,
+		children = $bindable()
+	}: { showModal: boolean; header: Snippet; children: typeof $bindable } = $props(); // boolean
 
-	let dialog: HTMLDialogElement
+	let dialog: HTMLDialogElement;
 
-    $effect(() => {
-        if (dialog && showModal) {
-            dialog.showModal();
-        }
-    })
+	$effect(() => {
+		if (dialog && showModal) {
+			dialog.showModal();
+		}
+	});
 
 	// $: if (dialog && showModal) dialog.showModal();
 </script>
 
 <!-- svelte-ignore a11y_click_events_have_key_events a11y_no_noninteractive_element_interactions -->
-<dialog
-	bind:this={dialog}
-	onclose={() => (showModal = false)}
-	onclick={() => dialog.close()}
->
+<dialog bind:this={dialog} onclose={() => (showModal = false)} onclick={() => dialog.close()}>
 	<!-- svelte-ignore a11y_no_static_element_interactions -->
 	<div onclick={(e) => e.stopPropagation()}>
 		{#if header}
-          {@render header()}
-        {/if}
+			{@render header()}
+		{/if}
 		<hr />
 		{@render children()}
 		<hr />

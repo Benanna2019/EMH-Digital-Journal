@@ -21,6 +21,8 @@
 	//     );
 	//   }
 
+	console.log('$page.url', $page.url);
+
 	const sections = [
 		{
 			label: null,
@@ -40,7 +42,7 @@
 					label: 'Writing',
 					//   icon: WritingIcon,
 					trailingAccessory: null,
-					isActive: $page.url.pathname.indexOf('/writing') >= 0,
+					isActive: $page.url.pathname === '/writing',
 					trailingAction: null,
 					isExternal: false
 				}
@@ -151,7 +153,7 @@
 					label: 'App Dissection',
 					//   icon: AppDissectionIcon,
 					trailingAccessory: null,
-					isActive: $page.url.pathname.indexOf('/app-dissection') >= 0,
+					isActive: $page.url.pathname === '/app-dissection',
 					trailingAction: null,
 					isExternal: false
 				}
@@ -209,7 +211,7 @@
 		<ul class="space-y-1">
 			{#if section.label}
 				<h4
-					class="text-gray-1000 px-2 pb-2 pt-5 text-xs font-semibold text-opacity-40 dark:text-white"
+					class="px-2 pb-2 pt-5 text-xs font-semibold text-gray-1000 text-opacity-40 dark:text-white"
 				>
 					{section.label}
 				</h4>
@@ -217,8 +219,7 @@
 			{#each section.items as item, j}
 				<NavigationLink
 					link={{
-						...item,
-						isActive: item.href.startsWith('/') ? $page.url.pathname.indexOf(item.href) >= 0 : false
+						...item
 						//   trailingAction: item.href === '/bookmarks' && isAdmin ? ThisAddBookmarkDialog : null
 					}}
 				/>

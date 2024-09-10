@@ -21,11 +21,15 @@
 		"@sveltejs/vite-plugin-svelte": "^3.0.0",
 		"@tailwindcss/typography": "^0.5.14",
 		"@types/eslint": "^9.6.0",
+		"@types/lodash": "^4.17.7",
 		"autoprefixer": "^10.4.20",
 		"eslint": "^9.0.0",
 		"eslint-config-prettier": "^9.1.0",
 		"eslint-plugin-svelte": "^2.36.0",
 		"globals": "^15.0.0",
+		"i": "^0.3.7",
+		"instant-cli": "^0.12.30",
+		"npm": "^10.8.3",
 		"prettier": "^3.3.3",
 		"prettier-plugin-svelte": "^3.2.6",
 		"prettier-plugin-tailwindcss": "^0.6.5",
@@ -41,10 +45,12 @@
 	"type": "module",
 	"dependencies": {
 		"@instantdb/core": "^0.12.15-alpha.0",
+		"@instantdb/react": "^0.12.19",
 		"@tailwindcss/forms": "^0.5.7",
 		"@teamhanko/hanko-elements": "^1.0.0",
 		"@xstate/store": "^2.1.0",
 		"jose": "^5.6.3",
+		"lodash": "^4.17.21",
 		"replicache": "^15.0.1",
 		"xstate": "^5.17.3"
 	}

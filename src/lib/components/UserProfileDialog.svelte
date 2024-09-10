@@ -1,7 +1,10 @@
 <script lang="ts">
-	import type { Snippet } from "svelte";
+	import { createEventDispatcher, type Snippet } from "svelte";
+	import GhostButton from "./Buttons/GhostButton.svelte";
+	import { db } from "$lib/instantdb/db";
+	import { goto } from "$app/navigation";
 
-	let { showProfile = $bindable(), header, children = $bindable() }: { showProfile: boolean, header: Snippet, children: typeof $bindable } = $props(); // boolean
+	let { showProfile = $bindable(), header, handleSignOut }: { showProfile: boolean, header: Snippet, handleSignOut: () => void } = $props(); // boolean
 
 	let dialog: HTMLDialogElement
 
@@ -11,14 +14,14 @@
         }
     })
 
-	// $: if (dialog && showModal) dialog.showModal();
+
 </script>
 
 <!-- svelte-ignore a11y_click_events_have_key_events a11y_no_noninteractive_element_interactions -->
 <dialog
 	bind:this={dialog}
 	onclose={() => (showProfile = false)}
-	onclick={() => dialog.close()}
+	
 >
 	<!-- svelte-ignore a11y_no_static_element_interactions -->
 	<div onclick={(e) => e.stopPropagation()}>
@@ -26,7 +29,13 @@
           {@render header()}
         {/if}
 		<hr />
-		{@render children()}
+		<GhostButton onclick={() => {
+			handleSignOut()
+			dialog.close()
+		}}>
+			Sign out
+		  </GhostButton>
+
 		<hr />
 		<!-- svelte-ignore a11y_autofocus -->
 		<button autofocus onclick={() => dialog.close()}>close modal</button>

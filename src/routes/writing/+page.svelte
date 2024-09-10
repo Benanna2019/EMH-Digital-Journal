@@ -1,18 +1,14 @@
 <script lang="ts">
-	import './app.css';
-	import { dev } from '$app/environment';
-	import { Replicache, type WriteTransaction } from 'replicache';
-	import { flip } from 'svelte/animate';
-
-	import HankoAuth from '$lib/components/Hanko/HankoAuth.svelte';
 	import ListDetailView from '$lib/components/Layout/ListDetailView.svelte';
 	import SiteLayout from '$lib/components/Layout/SiteLayout.svelte';
+	import Container from '$lib/components/ListDetail/Detail/Container.svelte';
 	import ContentContainer from '$lib/components/ListDetail/Detail/ContentContainer.svelte';
 	import TitleBar from '$lib/components/ListDetail/TitleBar.svelte';
-	import Container from '$lib/components/ListDetail/Detail/Container.svelte';
+	import { flip } from 'svelte/animate';
+	import JournalList from '$lib/components/Writing/JournalList.svelte';
+
 	import { db, tx, id, type Todo } from '$lib/instantdb/db';
 	import { onMount } from 'svelte';
-	import { useUser } from '$lib/instantdb/useUser.svelte';
 
 	// Implement a very simple version of some of Brian Lovin's site
 	// Inject 'templates' for journals. Should probably just be markdown that can be edited
@@ -21,8 +17,6 @@
 
 	let todos: Todo[] = $state([]);
 	let form_state = $state({ name: '' });
-
-	let userQuery = useUser(db);
 
 	onMount(() => {
 		db.subscribeQuery({ todos: {} }, (resp) => {
@@ -45,30 +39,31 @@
 
 	function onsubmit(e: SubmitEvent) {
 		e.preventDefault();
-		if (!userQuery.state.user) return;
 		db.transact([
-			tx.todos[id()]
-				.update({
-					name: form_state.name,
-					completed: false,
-					createdAt: new Date().toISOString(),
-					updatedAt: new Date().toISOString()
-				})
-				.link({
-					users: userQuery.state.userData.userId
-				})
+			tx.todos[id()].update({
+				name: form_state.name,
+				completed: false,
+				createdAt: new Date().toISOString(),
+				updatedAt: new Date().toISOString()
+			})
 		]);
 		form_state.name = '';
 	}
 </script>
 
 <SiteLayout>
-	<ListDetailView list={null} hasDetail={false} {detail} />
+	<ListDetailView {list} hasDetail={false} {detail} />
 </SiteLayout>
 
 {#snippet detail()}
-	<Container>
-		<TitleBar magicTitle title="Home" />
+	<!-- <Container>
+		<TitleBar
+			magicTitle
+			title="Home"
+			backButton={true}
+			backButtonHref="/writing"
+			globalMenu={false}
+		/>
 
 		<div class="p-4"></div>
 
@@ -121,7 +116,11 @@
 				</ul>
 			</div>
 		</ContentContainer>
-	</Container>
+	</Container> -->
+{/snippet}
+
+{#snippet list()}
+	<JournalList />
 {/snippet}
 
 <style>

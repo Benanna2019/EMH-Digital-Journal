@@ -1,79 +1,159 @@
-<script>
-    import { goto } from "$app/navigation";
-    import { Hanko } from "@teamhanko/hanko-elements";
-    import { page } from "$app/stores";
-	  import HankoAuth from "../Hanko/HankoAuth.svelte";
-    import GhostButton from "../Buttons/GhostButton.svelte";
-    import SigninDialog from "../SigninDialog.svelte";
-    import LoadingSpinner from "../LoadingSpinner.svelte";
-    import HankoProfile from "../Hanko/HankoProfile.svelte";
-	import UserProfileDialog from "../UserProfileDialog.svelte";
+<script lang="ts">
+	import { goto } from '$app/navigation';
+	import GhostButton from '../Buttons/GhostButton.svelte';
+	import SigninDialog from '../SigninDialog.svelte';
+	import UserProfileDialog from '../UserProfileDialog.svelte';
+	import { db, id, tx } from '$lib/instantdb/db';
+	import { onMount } from 'svelte';
+	import type { User } from '@instantdb/core';
+	import { userByAuthIdQuery } from '$lib/instantdb/queries';
+	import { useQuery } from '$lib/instantdb/useQuery.svelte';
+	import { useAuth } from '$lib/instantdb/useAuth.svelte';
+	import { useUser } from '$lib/instantdb/useUser.svelte';
+	import Container from '../ListDetail/Detail/Container.svelte';
+	import LoadingSpinner from '../LoadingSpinner.svelte';
 
-    let showModal = $state(false);
-    let showProfile = $state(false);
-  
-    const hankoApi = import.meta.env.VITE_HANKO_API_URL;
-  
-    const hanko = new Hanko(hankoApi);
+	let googAuthURI = $state('');
 
-    let user = hanko.user.getCurrent()
+	onMount(() => {
+		if (typeof window === 'undefined') return;
+		googAuthURI = db.auth.createAuthorizationURL({
+			clientName: 'google-web',
+			redirectURL: window.location.href
+		});
+	});
 
-    console.log("user: ",user);
+	let authInitialized = $state(false);
+	let renderMagicCodePage = $state(false);
+	let email = $state('');
 
+	// let user: User | null = $state(null);
 
-    // if there isn't a current user, we want the a modal popup with the HankoAuth contents in it
-    // if there is a current user, we want to render the profile button, either in a modal or 
-    // get display some user data and when they click on it, it would take them to their profile page
-  </script>
+	const auth = useAuth(db);
 
-<div data-cy="sign-in-button" class="sticky bottom-0 z-10 flex items-center justify-center p-2 space-x-3 bg-white border-t filter-blur border-gray-150 bg-opacity-80 dark:border-gray-800 dark:bg-gray-900 dark:bg-opacity-60"
-    >
-  {#await user}
-  <div class="flex items-center justify-center w-full py-1">
-    <LoadingSpinner />
-  </div>
-  {:then user} 
-    {#if !user}
-      <GhostButton onclick={() => (showModal = true)} style={{ width: '100%' }}>
-        Sign in
-      </GhostButton>
-    {:else}
-      <GhostButton  onclick={() => (showProfile = true)}>
-        {user.email}
-      </GhostButton>
-    {/if}
-  {:catch error}
-    <GhostButton onclick={() => (showModal = true)} style={{ width: '100%' }}>
-      Sign in
-    </GhostButton>
-  {/await}
+	let user = useUser(db);
+
+	$inspect('userState', user.state);
+
+	// const userQuery = useQuery(db, userByAuthId());
+
+	// $effect(() => {
+	// 	if (auth.state.user) {
+	// 		const { query } = userByAuthIdQuery(auth.state.user.id);
+	// 		const userQuery = useQuery(db, query);
+	// 		$inspect('userQuery', userQuery.state.data);
+	// 		user = auth.state.user;
+	// 		authInitialized = true;
+	// 	}
+	// });
+
+	function handleSignOut() {
+		db.auth.signOut();
+		// user = null;
+		authInitialized = false;
+	}
+
+	async function handleSignIn(e: Event) {
+		e.preventDefault();
+		const form = e.target as HTMLFormElement;
+		email = form.email.value;
+		try {
+			await db.auth.sendMagicCode({ email });
+			renderMagicCodePage = true;
+		} catch (error: unknown) {
+			if (error instanceof Error && 'body' in error) {
+				alert(`Error: ${(error as any).body?.message}`);
+			} else {
+				alert('An error occurred');
+			}
+		}
+	}
+
+	async function handleCodeSubmit(e: Event) {
+		e.preventDefault();
+		const form = e.target as HTMLFormElement;
+		const code = form.code.value || '';
+		try {
+			let response = await db.auth.signInWithMagicCode({ email, code });
+			console.log('response: ', response);
+			if (response.user) {
+				db.transact([
+					tx.users[id()].update({
+						userId: response.user.id,
+						email: response.user.email,
+						createdAt: response.user.createdAt
+					})
+				]);
+			}
+		} catch (error: unknown) {
+			if (error instanceof Error && 'body' in error) {
+				alert(`Error: ${(error as any).body?.message}`);
+			} else {
+				alert('An error occurred');
+			}
+		}
+	}
+
+	let showModal = $state(false);
+	let showProfile = $state(false);
+</script>
+
+<div
+	data-cy="sign-in-button"
+	class="filter-blur sticky bottom-0 z-10 flex items-center justify-center space-x-3 border-t border-gray-150 bg-white bg-opacity-80 p-2 dark:border-gray-800 dark:bg-gray-900 dark:bg-opacity-60"
+>
+	{#if user.state.isLoading}
+		<Container>
+			<div class="flex w-full items-center justify-center py-1">
+				<LoadingSpinner />
+			</div>
+		</Container>
+	{:else if !user.state.user}
+		<GhostButton onclick={() => (showModal = true)} style={{ width: '100%' }}>Sign in</GhostButton>
+	{:else}
+		<GhostButton onclick={() => (showProfile = true)}>
+			{user.state.userData?.email}
+		</GhostButton>
+	{/if}
 </div>
 
 {#snippet header()}
-  <h2>
-    Sign in
-  </h2>
+	<h2>Sign in</h2>
+{/snippet}
+
+{#snippet signinContent()}
+	{#if !renderMagicCodePage}
+		<div>
+			<h3>Log in with a magic code:</h3>
+			<form id="email-input-form" onsubmit={handleSignIn}>
+				<input type="email" name="email" placeholder="Email" />
+				<button type="submit">Send code</button>
+			</form>
+			<hr />
+			<h3>Or use Google:</h3>
+			<a href="${googAuthURI}">Sign in with Google</a>
+			<div id="google-one-tap"></div>
+		</div>
+	{:else}
+		<div>
+			<form id="magic-code-form" onsubmit={handleCodeSubmit}>
+				<h3>Check your email</h3>
+				<p>We've sent a magic code to {email}. Enter it below to sign in.</p>
+				<input type="text" name="code" placeholder="Magic Code" />
+				<button type="submit">Verify code</button>
+			</form>
+		</div>
+	{/if}
 {/snippet}
 
 <SigninDialog bind:showModal {header}>
-	<HankoAuth></HankoAuth>
+	{@render signinContent()}
 </SigninDialog>
 
-<UserProfileDialog bind:showProfile {header}>
-  <HankoProfile></HankoProfile>
-</UserProfileDialog>
+<UserProfileDialog bind:showProfile {header} {handleSignOut} />
 
-    
 <!--   
-    if (loading) {
-      return (
-        <Container>
-          <div className="flex items-center justify-center w-full py-1">
-            <LoadingSpinner />
-          </div>
-        </Container>
-      )
-    }
+    
   
     if (error) {
       return <Container>{signInButton()}</Container>

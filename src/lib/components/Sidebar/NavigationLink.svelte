@@ -1,6 +1,4 @@
 <script lang="ts">
-	
-
 	type NavLink = {
 		link: {
 			href: string;
