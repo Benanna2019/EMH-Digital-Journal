@@ -9,14 +9,15 @@
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"lint": "prettier --check . && eslint .",
-		"format": "prettier --write ."
+		"format": "prettier --write .",
+		"convert-md-to-json": "node scripts/convert-md-to-json.js"
 	},
 	"devDependencies": {
 		"@serwist/build": "^9.0.5",
 		"@serwist/vite": "^9.0.5",
 		"@serwist/window": "^9.0.5",
 		"@sveltejs/adapter-auto": "^3.0.0",
-		"@sveltejs/adapter-cloudflare": "^4.7.0",
+		"@sveltejs/adapter-cloudflare": "^4.1.0",
 		"@sveltejs/kit": "^2.0.0",
 		"@sveltejs/vite-plugin-svelte": "^3.0.0",
 		"@tailwindcss/typography": "^0.5.14",
@@ -36,7 +37,7 @@
 		"serwist": "^9.0.5",
 		"svelte": "^5.0.0-next.1",
 		"svelte-check": "^3.6.0",
-		"svelte-feather-icons": "^4.1.0",
+		"svelte-feather-icons": "^3.3.0",
 		"tailwindcss": "^3.4.9",
 		"typescript": "^5.0.0",
 		"typescript-eslint": "^8.0.0-alpha.20",
@@ -49,9 +50,11 @@
 		"@tailwindcss/forms": "^0.5.7",
 		"@teamhanko/hanko-elements": "^1.0.0",
 		"@xstate/store": "^2.1.0",
+		"gray-matter": "^4.0.3",
 		"jose": "^5.6.3",
 		"lodash": "^4.17.21",
 		"replicache": "^15.0.1",
+		"svelte-file-dropzone": "^2.0.8",
 		"xstate": "^5.17.3"
 	}
 }

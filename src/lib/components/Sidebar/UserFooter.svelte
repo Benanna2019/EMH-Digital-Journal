@@ -1,13 +1,9 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
 	import GhostButton from '../Buttons/GhostButton.svelte';
 	import SigninDialog from '../SigninDialog.svelte';
 	import UserProfileDialog from '../UserProfileDialog.svelte';
 	import { db, id, tx } from '$lib/instantdb/db';
 	import { onMount } from 'svelte';
-	import type { User } from '@instantdb/core';
-	import { userByAuthIdQuery } from '$lib/instantdb/queries';
-	import { useQuery } from '$lib/instantdb/useQuery.svelte';
 	import { useAuth } from '$lib/instantdb/useAuth.svelte';
 	import { useUser } from '$lib/instantdb/useUser.svelte';
 	import Container from '../ListDetail/Detail/Container.svelte';
@@ -100,7 +96,7 @@
 
 <div
 	data-cy="sign-in-button"
-	class="filter-blur sticky bottom-0 z-10 flex items-center justify-center space-x-3 border-t border-gray-150 bg-white bg-opacity-80 p-2 dark:border-gray-800 dark:bg-gray-900 dark:bg-opacity-60"
+	class="filter-blur border-gray-150 sticky bottom-0 z-10 flex items-center justify-center space-x-3 border-t bg-white bg-opacity-80 p-2 dark:border-gray-800 dark:bg-gray-900 dark:bg-opacity-60"
 >
 	{#if user.state.isLoading}
 		<Container>

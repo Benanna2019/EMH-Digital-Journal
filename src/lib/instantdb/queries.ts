@@ -14,3 +14,17 @@ export const userByAuthIdQuery = (authId: string) => {
 		}
 	};
 };
+
+export const journalEntryQuery = (slug: string) => {
+	return {
+		query: {
+			'journal-entries': {
+				$: {
+					where: {
+						slug
+					}
+				}
+			}
+		}
+	};
+};

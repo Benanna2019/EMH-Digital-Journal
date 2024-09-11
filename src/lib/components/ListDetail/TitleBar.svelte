@@ -1,4 +1,5 @@
 <script lang="ts">
+	// @ts-ignore
 	import { ArrowLeftIcon, MenuIcon, XIcon } from 'svelte-feather-icons';
 	import { getContext } from 'svelte';
 	import { type NavState } from '$lib/store/GlobalNavContext.svelte';
@@ -7,10 +8,7 @@
 
 	const toggleNavStateOpen = () => {
 		navState.isOpen = !navState.isOpen;
-		console.log('nav state in toggle', navState.isOpen);
 	};
-
-	console.log('nav state from title bar: ', navState.isOpen);
 
 	type Props = {
 		isOpen?: boolean;

@@ -6,7 +6,6 @@
 	import NavigationLink from './NavigationLink.svelte';
 	//   import Icons from '$lib/components/Icons';
 
-	// Placeholder for Hanko integration
 	let isAdmin = false;
 
 	//   function ThisAddBookmarkDialog() {
@@ -20,8 +19,6 @@
 	//       />
 	//     );
 	//   }
-
-	console.log('$page.url', $page.url);
 
 	const sections = [
 		{
@@ -38,11 +35,11 @@
 				},
 
 				{
-					href: '/writing',
-					label: 'Writing',
+					href: '/journal',
+					label: 'Journal',
 					//   icon: WritingIcon,
 					trailingAccessory: null,
-					isActive: $page.url.pathname === '/writing',
+					isActive: $page.url.pathname === '/journal',
 					trailingAction: null,
 					isExternal: false
 				}
@@ -63,108 +60,22 @@
 				},
 
 				{
-					href: '/ama',
-					label: 'AMA',
+					href: '/todos',
+					label: 'Todo Lists',
 					//   icon: AMAIcon,
 					trailingAccessory: null,
-					isActive:
-						$page.url.pathname.indexOf('/ama') >= 0 &&
-						!$page.url.pathname.startsWith('/ama/pending'),
-					trailingAction: null,
-					isExternal: false
-				},
-
-				{
-					href: '/stack',
-					label: 'Stack',
-					//   icon: StackIcon,
-					trailingAccessory: null,
-					isActive: $page.url.pathname.indexOf('/stack') >= 0,
+					isActive: $page.url.pathname.includes('/todos'),
 					trailingAction: null,
 					isExternal: false
 				}
 			]
 		},
 		{
-			label: 'Projects',
+			label: 'Resources',
 			items: [
 				{
-					href: 'https://campsite.co',
-					label: 'Campsite',
-					//   icon: CampsiteIcon,
-					//   trailingAccessory: ExternalLinkIcon,
-					isActive: false,
-					trailingAction: null,
-					isExternal: true
-				},
-
-				{
-					href: 'https://designdetails.fm',
-					label: 'Design Details',
-					//   icon: PodcastIcon,
-					//   trailingAccessory: ExternalLinkIcon,
-					isActive: false,
-					trailingAction: null,
-					isExternal: true
-				},
-
-				{
-					href: 'https://staff.design',
-					label: 'Staff Design',
-					//   icon: StaffDesignIcon,
-					//   trailingAccessory: ExternalLinkIcon,
-					isActive: false,
-					trailingAction: null,
-					isExternal: true
-				},
-
-				{
-					href: 'https://figma.com/@brian',
-					label: 'Figma Plugins',
-					//   icon: FigmaIcon,
-					//   trailingAccessory: ExternalLinkIcon,
-					isActive: false,
-					trailingAction: null,
-					isExternal: true
-				},
-
-				{
-					href: '/security',
-					label: 'Security Checklist',
-					//   icon: SecurityChecklistIcon,
-					trailingAccessory: null,
-					isActive: $page.url.pathname.indexOf('/security') >= 0,
-					trailingAction: null,
-					isExternal: false
-				},
-
-				{
-					href: '/hn',
-					label: 'Hacker News',
-					//   icon: HackerNewsIcon,
-					trailingAccessory: null,
-					isActive: $page.url.pathname.indexOf('/hn') >= 0,
-					trailingAction: null,
-					isExternal: false
-				},
-
-				{
-					href: '/app-dissection',
-					label: 'App Dissection',
-					//   icon: AppDissectionIcon,
-					trailingAccessory: null,
-					isActive: $page.url.pathname === '/app-dissection',
-					trailingAction: null,
-					isExternal: false
-				}
-			]
-		},
-		{
-			label: 'Online',
-			items: [
-				{
-					href: 'https://twitter.com/brian_lovin',
-					label: 'Twitter',
+					href: 'https://rabbitroom.com',
+					label: 'Rabbit Room',
 					//   icon: TwitterIcon,
 					//   trailingAccessory: ExternalLinkIcon,
 					isActive: false,
@@ -173,8 +84,8 @@
 				},
 
 				{
-					href: 'https://www.youtube.com/channel/UC-esBYEUGQ6iK1wmw76f5MA',
-					label: 'YouTube',
+					href: 'https://www.youtube.com/@therabbitroom1380',
+					label: 'RR YouTube',
 					//   icon: YouTubeIcon,
 					//   trailingAccessory: ExternalLinkIcon,
 					isActive: false,
@@ -183,19 +94,9 @@
 				},
 
 				{
-					href: 'https://github.com/brianlovin',
-					label: 'GitHub',
+					href: 'https://store.rabbitroom.com/',
+					label: 'RR Store',
 					//   icon: GitHubIcon,
-					//   trailingAccessory: ExternalLinkIcon,
-					isActive: false,
-					trailingAction: null,
-					isExternal: true
-				},
-
-				{
-					href: 'https://figma.com/@brian',
-					label: 'Figma',
-					//   icon: FigmaIcon,
 					//   trailingAccessory: ExternalLinkIcon,
 					isActive: false,
 					trailingAction: null,
@@ -211,7 +112,7 @@
 		<ul class="space-y-1">
 			{#if section.label}
 				<h4
-					class="px-2 pb-2 pt-5 text-xs font-semibold text-gray-1000 text-opacity-40 dark:text-white"
+					class="text-gray-1000 px-2 pb-2 pt-5 text-xs font-semibold text-opacity-40 dark:text-white"
 				>
 					{section.label}
 				</h4>

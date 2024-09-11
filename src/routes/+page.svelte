@@ -1,10 +1,7 @@
 <script lang="ts">
 	import './app.css';
-	import { dev } from '$app/environment';
-	import { Replicache, type WriteTransaction } from 'replicache';
 	import { flip } from 'svelte/animate';
 
-	import HankoAuth from '$lib/components/Hanko/HankoAuth.svelte';
 	import ListDetailView from '$lib/components/Layout/ListDetailView.svelte';
 	import SiteLayout from '$lib/components/Layout/SiteLayout.svelte';
 	import ContentContainer from '$lib/components/ListDetail/Detail/ContentContainer.svelte';
@@ -45,9 +42,12 @@
 
 	function onsubmit(e: SubmitEvent) {
 		e.preventDefault();
+		// TODO: Throw a toast error if user is not logged in
 		if (!userQuery.state.user) return;
+		// TODO: Throw a toast error/notification if the form_state.name is empty
+		const newTodoId = id();
 		db.transact([
-			tx.todos[id()]
+			tx.todos[newTodoId]
 				.update({
 					name: form_state.name,
 					completed: false,
@@ -55,7 +55,7 @@
 					updatedAt: new Date().toISOString()
 				})
 				.link({
-					users: userQuery.state.userData.userId
+					users: userQuery.state.userData.id
 				})
 		]);
 		form_state.name = '';
