@@ -11,24 +11,20 @@
 
 	// need to use the context I've set
 	import { getContext } from 'svelte';
-	import { type EditorContext } from '$lib/store/PostEditorContext.svelte';
+	import { getEditorState } from '$lib/store/PostEditorContext.svelte';
 	import { addJournalEntry, editJournalEntry } from '$lib/instantdb/mutations';
 
-	let { draftState, existingPost, sidebarIsOpen, isPreviewing } =
-		getContext<EditorContext>('editorContext');
-
-    console.log('sidebarIsOpen: ', sidebarIsOpen)
+	let editorContext = getEditorState();
 
 	let isSavingDraft = $state(false);
 
-    
 	async function handleEditOrCreate() {
 		isSavingDraft = true;
 		try {
-			if (existingPost?.id) {
-				editJournalEntry(existingPost.id, draftState);
+			if (editorContext.existingPost?.id) {
+				editJournalEntry(editorContext.existingPost.id, editorContext.draftState);
 			} else {
-				const newPost = await addJournalEntry(draftState);
+				const newPost = await addJournalEntry(editorContext.draftState);
 				// find a better toast solution
 				// toast.success('Draft created');
 				goto(`/writing/${newPost.slug}/edit`);
@@ -42,8 +38,8 @@
 	}
 
 	function toggleSidebar() {
-        console.log('toggle has been toggled')
-		sidebarIsOpen = sidebarIsOpen === true ? false : true;
+		console.log('toggle has been toggled');
+		editorContext.toggleSidebar();
 	}
 </script>
 
@@ -53,7 +49,7 @@
 			<LoadingSpinner />
 		{:else}
 			<PostEditorAutoSave />
-			<span>{existingPost?.publishedAt ? 'Update' : 'Save draft'}</span>
+			<span>{editorContext.existingPost?.publishedAt ? 'Update' : 'Save draft'}</span>
 		{/if}
 	</Button>
 	<Button onclick={toggleSidebar}>

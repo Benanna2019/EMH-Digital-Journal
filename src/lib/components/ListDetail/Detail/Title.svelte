@@ -1,13 +1,7 @@
 <script lang="ts">
-    let props = $props()
-
-    let ref: HTMLElement
+	let props = $props();
 </script>
 
-<h1
-      ref={ref}
-      class="text-primary font-sans text-2xl font-bold xl:text-3xl"
-      {...props}
-    >
-    {@html props.children()}
+<h1 class="text-primary font-sans text-2xl font-bold xl:text-3xl">
+	{props.children?.()}
 </h1>

@@ -17,11 +17,6 @@
 	let activeItem = $state(active);
 	let isActive = $state(false);
 
-	$inspect('activeItem: ', activeItem);
-	$inspect('items: ', items);
-	$inspect('active: ', active);
-	$inspect('isActive: ', isActive);
-
 	// I think I need to set context in some form for the active item
 	// rather than passing state and things or I can try doing component composition up in the writing title bar
 

@@ -1,3 +1,5 @@
+import { getContext, setContext } from 'svelte';
+
 type DraftState = {
 	title: string;
 	text: string;
@@ -5,45 +7,41 @@ type DraftState = {
 	excerpt: string;
 };
 
-export const createEditorContext = (
-	initialDraft: DraftState = { title: '', text: '', slug: '', excerpt: '' }
-) => {
-	let draftState = $state(initialDraft);
-	let existingPost = $state<any | null>(null);
-	let sidebarIsOpen = $state(false);
-	let isPreviewing = $state(false);
+export class EditorState {
+	draftState = $state<DraftState>({ title: '', text: '', slug: '', excerpt: '' });
+	existingPost = $state<any | null>(null);
+	sidebarIsOpen = $state(false);
+	isPreviewing = $state(false);
 
-	console.log('drafState: ', draftState)
+	updateDraft(partialDraft: Partial<DraftState>) {
+		this.draftState = { ...this.draftState, ...partialDraft };
+	}
 
-	return {
-		get draftState() {
-			return draftState;
-		},
-		set draftState(value: DraftState) {
-			draftState = value;
-		},
-		get existingPost() {
-			return existingPost;
-		},
-		set existingPost(value: any | null) {
-			existingPost = value;
-		},
-		get sidebarIsOpen() {
-			return sidebarIsOpen;
-		},
-		set sidebarIsOpen(value: boolean) {
-			sidebarIsOpen = value;
-		},
-		get isPreviewing() {
-			return isPreviewing;
-		},
-		set isPreviewing(value: boolean) {
-			isPreviewing = value;
-		},
-		updateDraft(partialDraft: Partial<DraftState>) {
-			draftState = { ...draftState, ...partialDraft };
-		}
-	};
-};
+	toggleSidebar() {
+		this.sidebarIsOpen = !this.sidebarIsOpen;
+	}
 
-export type EditorContext = ReturnType<typeof createEditorContext>;
+	togglePreview() {
+		this.isPreviewing = !this.isPreviewing;
+	}
+
+	getDraft() {
+		return this.draftState;
+	}
+
+	getIsPreviewing() {
+		return this.isPreviewing;
+	}
+
+	// TODO: add a method for updating the existingPost based off of slug on journal/[slug]/+page.svelte
+}
+
+const EDITOR_KEY = Symbol('EDITOR');
+
+export function setEditorState() {
+	return setContext(EDITOR_KEY, new EditorState());
+}
+
+export function getEditorState() {
+	return getContext<EditorState>(EDITOR_KEY);
+}

@@ -15,6 +15,7 @@ const defaultUserState: UserState = {
 	error: undefined
 };
 
+// @ts-ignore
 export function useUser<Schema>(db: InstantClient<Schema>) {
 	let state = $state(defaultUserState);
 
@@ -39,6 +40,7 @@ export function useUser<Schema>(db: InstantClient<Schema>) {
 						}
 					};
 
+					// @ts-ignore
 					const queryUnsubscribe = db.subscribeQuery(query, (queryResult) => {
 						untrack(() => {
 							state = {

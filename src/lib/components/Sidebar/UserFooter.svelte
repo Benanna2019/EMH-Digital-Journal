@@ -29,8 +29,6 @@
 
 	let user = useUser(db);
 
-	$inspect('userState', user.state);
-
 	// const userQuery = useQuery(db, userByAuthId());
 
 	// $effect(() => {
@@ -96,7 +94,7 @@
 
 <div
 	data-cy="sign-in-button"
-	class="filter-blur border-gray-150 sticky bottom-0 z-10 flex items-center justify-center space-x-3 border-t bg-white bg-opacity-80 p-2 dark:border-gray-800 dark:bg-gray-900 dark:bg-opacity-60"
+	class="filter-blur sticky bottom-0 z-10 flex items-center justify-center space-x-3 border-t border-gray-150 bg-white bg-opacity-80 p-2 dark:border-gray-800 dark:bg-gray-900 dark:bg-opacity-60"
 >
 	{#if user.state.isLoading}
 		<Container>

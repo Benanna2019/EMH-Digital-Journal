@@ -1,13 +1,5 @@
 <script lang="ts">
-  import { getContext } from 'svelte';
-  import Switch from '$lib/components/Switch.svelte';
- import { type EditorContext } from '$lib/store/PostEditorContext.svelte';
-
-  let { isPreviewing } = getContext<EditorContext>('editorContext');
+	import Switch from '$lib/components/Switch.svelte';
 </script>
 
-<Switch
-  label="Preview"
-  defaultEnabled={isPreviewing}
-  onChange={(event: any) => isPreviewing = event.detail}
-/>
+<Switch label="Preview" />

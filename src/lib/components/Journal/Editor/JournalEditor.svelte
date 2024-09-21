@@ -11,10 +11,7 @@
 	import { useAuth } from '$lib/instantdb/useAuth.svelte';
 	import { useQuery } from '$lib/instantdb/useQuery.svelte';
 	import { journalEntryQuery } from '$lib/instantdb/queries';
-	import { createEditorContext, type EditorContext } from '$lib/store/PostEditorContext.svelte';
-
-	const editorContext = createEditorContext();
-	console.log('layout editor context: ', editorContext);
+	import { getEditorState, setEditorState } from '$lib/store/PostEditorContext.svelte';
 
 	// should probably get this off of the url
 	let slug = $state('');
@@ -22,23 +19,9 @@
 	const entryQuery = journalEntryQuery(slug);
 	let journalQuery = useQuery(db, entryQuery);
 
-	$effect(() => {
-		if (journalQuery?.state.data) {
-			let draftState = $state({
-				title: journalQuery?.state.data?.title || '',
-				text: journalQuery?.state.data?.text || '',
-				slug: journalQuery?.state.data?.slug || '',
-				excerpt: journalQuery?.state.data?.excerpt || ''
-			});
+	const editorContext = getEditorState();
 
-			editorContext.existingPost = journalQuery?.state.data;
-			editorContext.draftState = draftState;
-			editorContext.sidebarIsOpen = false;
-			editorContext.isPreviewing = false;
-		}
-	});
-
-	setContext<EditorContext>('editorContext', editorContext);
+	console.log('editorContext in journal editor: ', editorContext);
 </script>
 
 {#snippet postEditorActions()}
@@ -59,7 +42,7 @@
 		leadingAccessory={previewSwitch}
 	/>
 
-	{#if editorContext.isPreviewing}
+	{#if editorContext.getIsPreviewing()}
 		<JournalEditorPreview />
 	{:else}
 		<JournalEditorComposer />

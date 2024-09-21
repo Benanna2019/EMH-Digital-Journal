@@ -13,6 +13,7 @@ const defaultAuthState: AuthState = {
 	error: undefined
 };
 
+// @ts-ignore
 function useAuth<Schema>(_core: InstantClient<Schema>) {
 	let state = $state(defaultAuthState);
 
