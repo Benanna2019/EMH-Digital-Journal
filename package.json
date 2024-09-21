@@ -19,7 +19,7 @@
 		"@sveltejs/adapter-auto": "^3.0.0",
 		"@sveltejs/adapter-cloudflare": "^4.1.0",
 		"@sveltejs/kit": "^2.0.0",
-		"@sveltejs/vite-plugin-svelte": "^3.0.0",
+		"@sveltejs/vite-plugin-svelte": "^4.0.0-next.6",
 		"@tailwindcss/typography": "^0.5.14",
 		"@types/eslint": "^9.6.0",
 		"@types/lodash": "^4.17.7",
@@ -29,7 +29,7 @@
 		"eslint-plugin-svelte": "^2.36.0",
 		"globals": "^15.0.0",
 		"i": "^0.3.7",
-		"instant-cli": "^0.12.30",
+		"instant-cli": "^0.12.37",
 		"npm": "^10.8.3",
 		"prettier": "^3.3.3",
 		"prettier-plugin-svelte": "^3.2.6",
@@ -45,7 +45,7 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"@instantdb/core": "^0.12.15-alpha.0",
+		"@instantdb/core": "^0.12.37",
 		"@instantdb/react": "^0.12.19",
 		"@tailwindcss/forms": "^0.5.7",
 		"@teamhanko/hanko-elements": "^1.0.0",
@@ -53,8 +53,14 @@
 		"gray-matter": "^4.0.3",
 		"jose": "^5.6.3",
 		"lodash": "^4.17.21",
+		"marked": "^14.1.2",
+		"rehype-autolink-headings": "^7.1.0",
+		"rehype-sanitize": "^6.0.0",
+		"rehype-slug": "^6.0.0",
+		"remark-gfm": "^4.0.0",
+		"remark-linkify-regex": "^1.2.1",
 		"replicache": "^15.0.1",
-		"svelte-file-dropzone": "^2.0.8",
+		"slugify": "^1.6.6",
 		"xstate": "^5.17.3"
 	}
 }

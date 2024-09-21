@@ -17,10 +17,8 @@
 	console.log('layout editor context: ', editorContext);
 
 	// should probably get this off of the url
-	let { slug }: { slug: string } = $props();
+	let slug = $state('');
 
-	let scrollContainerRef;
-	let auth = useAuth(db);
 	const entryQuery = journalEntryQuery(slug);
 	let journalQuery = useQuery(db, entryQuery);
 
@@ -51,12 +49,11 @@
 	<PreviewSwitch />
 {/snippet}
 
-<Container bind:this={scrollContainerRef}>
+<Container>
 	<TitleBar
 		backButton={true}
 		globalMenu={false}
 		backButtonHref="/writing"
-		{scrollContainerRef}
 		title=""
 		trailingAccessory={postEditorActions}
 		leadingAccessory={previewSwitch}

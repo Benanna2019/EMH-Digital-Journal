@@ -13,6 +13,8 @@ export const createEditorContext = (
 	let sidebarIsOpen = $state(false);
 	let isPreviewing = $state(false);
 
+	console.log('drafState: ', draftState)
+
 	return {
 		get draftState() {
 			return draftState;
