@@ -10,7 +10,7 @@
 	$inspect('editor context', editorContext);
 
 	const draft = editorContext.getDraft();
-	const title = draft.title;
+	const title = $state(draft.title);
 
 	console.log('draft', draft);
 
@@ -23,7 +23,7 @@
 		<h1 class="text-primary font-sans text-2xl font-bold xl:text-3xl">{title}</h1>
 	</Header>
 
-	<div class="prose">
+	<div class="prose pt-5">
 		{@html markdown}
 	</div>
 

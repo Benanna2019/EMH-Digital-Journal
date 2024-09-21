@@ -1,16 +1,11 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { SidebarIcon } from 'svelte-feather-icons';
-	import slugify from 'slugify';
 
 	import Button from '$lib/components/Buttons/Button.svelte';
 	import LoadingSpinner from '$lib/components/LoadingSpinner.svelte';
 	import PostEditorAutoSave from './JournalEditorAutoSave.svelte';
 
-	// Assuming these are defined elsewhere and imported
-
-	// need to use the context I've set
-	import { getContext } from 'svelte';
 	import { getEditorState } from '$lib/store/PostEditorContext.svelte';
 	import { addJournalEntry, editJournalEntry } from '$lib/instantdb/mutations';
 
@@ -27,7 +22,7 @@
 				const newPost = await addJournalEntry(editorContext.draftState);
 				// find a better toast solution
 				// toast.success('Draft created');
-				goto(`/writing/${newPost.slug}/edit`);
+				goto(`/journal/${newPost.slug}/edit`);
 			}
 		} catch (error) {
 			// find a better toast solution
@@ -44,7 +39,7 @@
 </script>
 
 <div class="flex items-center space-x-2">
-	<Button disabled={isSavingDraft} on:click={handleEditOrCreate}>
+	<Button disabled={isSavingDraft} onclick={handleEditOrCreate}>
 		{#if isSavingDraft}
 			<LoadingSpinner />
 		{:else}

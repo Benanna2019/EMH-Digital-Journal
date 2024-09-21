@@ -13,6 +13,10 @@ export class EditorState {
 	sidebarIsOpen = $state(false);
 	isPreviewing = $state(false);
 
+	constructor(initialJournalId: string | null = null) {
+		this.existingPost.id = initialJournalId;
+	}
+
 	updateDraft(partialDraft: Partial<DraftState>) {
 		this.draftState = { ...this.draftState, ...partialDraft };
 	}
@@ -33,13 +37,22 @@ export class EditorState {
 		return this.isPreviewing;
 	}
 
+	setExistingPost(post: any) {
+		this.existingPost = post;
+		this.draftState = { ...post };
+	}
+
+	setExistingPostId(id: string | null) {
+		this.existingPost.id = id;
+	}
+
 	// TODO: add a method for updating the existingPost based off of slug on journal/[slug]/+page.svelte
 }
 
 const EDITOR_KEY = Symbol('EDITOR');
 
-export function setEditorState() {
-	return setContext(EDITOR_KEY, new EditorState());
+export function setEditorState(initialJournalId: string | null = null) {
+	return setContext(EDITOR_KEY, new EditorState(initialJournalId));
 }
 
 export function getEditorState() {

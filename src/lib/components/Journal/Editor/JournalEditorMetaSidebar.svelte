@@ -12,6 +12,9 @@
 
 	let editorContext = getEditorState();
 
+	const styles =
+		'w-full rounded-md text-primary px-4 py-2 text-primary bg-gray-1000 dark:bg-white dark:bg-opacity-5 bg-opacity-5 hover border-gray-200 dark:border-gray-700';
+
 	let scrollContainerRef;
 	let editingPost = false;
 
@@ -67,13 +70,19 @@
 	<div class="flex-1 space-y-4 px-3 py-3">
 		<div class="flex flex-col space-y-1">
 			<p class="text-primary text-sm font-semibold">Slug</p>
-			<input placeholder="Slug" value={editorContext.draftState.slug} onchange={handleSlugChange} />
+			<input
+				placeholder="Slug"
+				class={styles}
+				value={editorContext.draftState.slug}
+				onchange={handleSlugChange}
+			/>
 		</div>
 
 		<div class="flex flex-col space-y-1">
 			<p class="text-primary text-sm font-semibold">Excerpt</p>
 			<textarea
 				value={editorContext.draftState.excerpt}
+				class={`${styles} block`}
 				placeholder="Excerpt"
 				rows={8}
 				onchange={handleExcerptChange}
@@ -85,7 +94,7 @@
 		class="filter-blur sticky bottom-0 z-10 flex items-center justify-between space-x-3 border-t border-gray-150 bg-white bg-opacity-80 p-2 dark:border-gray-800 dark:bg-gray-900 dark:bg-opacity-60"
 	>
 		{#if editorContext.existingPost?.id && !editorContext.existingPost?.publishedAt}
-			<PrimaryButton style="width: 100%" disabled={editingPost} on:click={handlePublish}>
+			<PrimaryButton style="width: 100%" disabled={editingPost} onclick={handlePublish}>
 				{#if editingPost}
 					<LoadingSpinner />
 				{:else}
@@ -94,7 +103,7 @@
 			</PrimaryButton>
 		{/if}
 		{#if editorContext.existingPost?.id && editorContext.existingPost?.publishedAt}
-			<Button style="width: 100%" disabled={editingPost} on:click={handleUnpublish}>
+			<Button style="width: 100%" disabled={editingPost} onclick={handleUnpublish}>
 				{#if editingPost}
 					<LoadingSpinner />
 				{:else}

@@ -14,7 +14,7 @@
 	import { getEditorState, setEditorState } from '$lib/store/PostEditorContext.svelte';
 
 	// should probably get this off of the url
-	let slug = $state('');
+	let { slug }: { slug: string } = $props();
 
 	const entryQuery = journalEntryQuery(slug);
 	let journalQuery = useQuery(db, entryQuery);
