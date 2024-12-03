@@ -10,6 +10,7 @@
 	import { db, tx, id, type Todo } from '$lib/instantdb/db';
 	import { onMount } from 'svelte';
 	import { useUser } from '$lib/instantdb/useUser.svelte';
+	import { useQuery } from '$lib/instantdb/useQuery.svelte';
 
 	// Implement a very simple version of some of Brian Lovin's site
 	// Inject 'templates' for journals. Should probably just be markdown that can be edited
@@ -21,6 +22,10 @@
 
 	let userQuery = useUser(db);
 
+	let todosQuery = useQuery(db, { todos: {} });
+
+	$inspect('todosQuery: ', todosQuery);
+
 	onMount(() => {
 		db.subscribeQuery({ todos: {} }, (resp) => {
 			if (resp.error) {
@@ -28,7 +33,6 @@
 				return;
 			}
 			if (resp.data) {
-				console.log('data', resp.data);
 				todos = resp.data.todos
 					.sort((a, b) => (a.createdAt < b.createdAt ? 1 : a.createdAt > b.createdAt ? -1 : 0))
 					.sort((a, b) => (a.completed === b.completed ? 0 : a.completed ? 1 : -1));

@@ -2,20 +2,15 @@
 	import ContentContainer from '$lib/components/ListDetail/Detail/ContentContainer.svelte';
 	import Header from '$lib/components/ListDetail/Detail/Header.svelte';
 	import Title from '$lib/components/ListDetail/Detail/Title.svelte';
-	import { getEditorState } from '$lib/store/PostEditorContext.svelte';
+	import { getEditorState } from '$lib/store/JournalEditorContext.svelte';
 	import { marked } from 'marked';
 
 	const editorContext = getEditorState();
 
-	$inspect('editor context', editorContext);
-
 	const draft = editorContext.getDraft();
 	const title = $state(draft.title);
 
-	console.log('draft', draft);
-
 	const markdown = marked.parse(draft.text);
-	console.log('markdown', markdown);
 </script>
 
 <ContentContainer>

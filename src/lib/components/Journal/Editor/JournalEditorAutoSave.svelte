@@ -3,25 +3,28 @@
 	import LoadingSpinner from '$lib/components/LoadingSpinner.svelte';
 	import { editJournalEntry } from '$lib/instantdb/mutations';
 
-	import { getContext } from 'svelte';
-	import { getEditorState } from '$lib/store/PostEditorContext.svelte';
+	import { getEditorState } from '$lib/store/JournalEditorContext.svelte';
 
 	let editorContext = getEditorState();
+
+	let existingJournalEntry = editorContext.getExistingJournalEntry();
+	let draftState = editorContext.getDraft();
 
 	let loading = $state(false);
 
 	let interval = $state<NodeJS.Timeout | string | number | undefined>();
 
 	function autoSave() {
-		if (!editorContext.existingPost?.id) return;
+		if (!existingJournalEntry?.id) return;
 
 		loading = true;
-		editJournalEntry(editorContext.existingPost.id, {
-			title: editorContext.draftState.title,
-			text: editorContext.draftState.text,
-			slug: editorContext.draftState.slug,
-			excerpt: editorContext.draftState.excerpt
+		editJournalEntry(existingJournalEntry.id, {
+			title: draftState.title,
+			text: draftState.text,
+			slug: draftState.slug,
+			excerpt: draftState.excerpt
 		});
+		loading = false;
 		//   .catch((error: any) => console.error('Auto-save failed:', error))
 		//   .finally(() => loading = false);
 	}

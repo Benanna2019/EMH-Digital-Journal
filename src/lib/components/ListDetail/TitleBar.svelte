@@ -66,12 +66,10 @@
 					role="button"
 					tabindex={0}
 					onclick={() => {
-						console.log('clicked');
 						// @ts-ignore
 						toggleNavStateOpen();
 					}}
 					onkeydown={() => {
-						console.log('keydown');
 						toggleIsOpen?.();
 					}}
 					class="flex cursor-pointer items-center justify-center rounded-md p-2 hover:bg-gray-200 lg:hidden"

@@ -1,16 +1,8 @@
 import type { Config } from 'tailwindcss';
 import colors from 'tailwindcss/colors'
+import typography from '@tailwindcss/typography';
 
-const mono = [
-  'ui-monospace',
-  'SFMono-Regular',
-  'Menlo',
-  'Monaco',
-  'Consolas',
-  'Liberation Mono',
-  'Courier New',
-  'monospace',
-]
+
  export default {
   content: ['./src/**/*.{js,svelte,ts}'],
   theme: {
@@ -47,6 +39,6 @@ const mono = [
         },
       },
     },
-  },
-	plugins: [require('@tailwindcss/typography')]
-} 
+	},
+	plugins: [typography],
+} satisfies Config;

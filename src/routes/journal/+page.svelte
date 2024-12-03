@@ -5,6 +5,7 @@
 
 	import { db, tx, id, type Todo } from '$lib/instantdb/db';
 	import { onMount } from 'svelte';
+	import { setFilterState } from '$lib/store/JournalEditorContext.svelte';
 
 	// Implement a very simple version of some of Brian Lovin's site
 	// Inject 'templates' for journals. Should probably just be markdown that can be edited
@@ -21,7 +22,6 @@
 				return;
 			}
 			if (resp.data) {
-				console.log('data', resp.data);
 				todos = resp.data.todos
 					.sort((a, b) => (a.createdAt < b.createdAt ? 1 : a.createdAt > b.createdAt ? -1 : 0))
 					.sort((a, b) => (a.completed === b.completed ? 0 : a.completed ? 1 : -1));
@@ -45,6 +45,8 @@
 		]);
 		form_state.name = '';
 	}
+
+	setFilterState();
 </script>
 
 <SiteLayout>

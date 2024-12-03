@@ -1,74 +1,72 @@
 <script lang="ts">
-	import Detail from '$lib/components/ListDetail/Detail.svelte';
-	import { TitleBar } from '$lib/components/ListDetail/TitleBar.svelte';
-	import { MarkdownRenderer } from '$lib/components/MarkdownRenderer.svelte';
+	import Container from '$lib/components/ListDetail/Detail/Container.svelte';
+	import Null from '$lib/components/ListDetail/Detail/Null.svelte';
+	import Loading from '$lib/components/ListDetail/Detail/Loading.svelte';
+	import TitleBar from '$lib/components/ListDetail/TitleBar.svelte';
+	import ContentContainer from '$lib/components/ListDetail/Detail/ContentContainer.svelte';
+	import Header from '../ListDetail/Detail/Header.svelte';
+	import JournalActions from './JournalActions.svelte';
 	import { timestampToCleanTime } from '$lib/transformers';
-	import { PostActions } from './PostActions.svelte';
-	import { PostSEO } from './PostSEO.svelte';
-	import { getPost } from '$lib/api/posts'; // Assume this is your API function
+	// Look into the PostSEO and see how to use the svelte:head tags
+	// import { PostSEO } from './PostSEO.svelte';
+	import { useQuery } from '$lib/instantdb/useQuery.svelte'; // Assume this is your API function
+	import { journalEntryQuery } from '$lib/instantdb/queries';
+	import { db } from '$lib/instantdb/db';
+	import { marked } from 'marked';
 
-	export let slug: string;
+	let { slug }: { slug: string } = $props();
 
 	let scrollContainerRef: HTMLElement;
-	let titleRef: HTMLElement;
-	let post: any;
-	let error: any;
-	let loading = true;
+	// let titleRef: HTMLElement;
 
-	$: {
-		getPost(slug).then(
-			(result) => {
-				post = result;
-				loading = false;
-			},
-			(err) => {
-				error = err;
-				loading = false;
-			}
-		);
-	}
+	let { query } = journalEntryQuery(slug);
 
-	$: publishedAt = post ? timestampToCleanTime({ timestamp: post.publishedAt }) : null;
+	let journalQuery = useQuery(db, query);
+
+	let publishedAt = journalQuery.state.data
+		? timestampToCleanTime({ timestamp: journalQuery.state.data['journal-entries'][0].publishedAt })
+		: null;
 </script>
 
-{#if loading}
-	<Detail.Loading />
-{:else if !post || error}
-	<Detail.Null />
+{#if journalQuery.state.isLoading}
+	<Loading />
+{:else if !journalQuery.state.data || journalQuery.state.error}
+	<Null />
 {:else}
-	<PostSEO {post} />
-	<Detail.Container data-cy="post-detail" bind:this={scrollContainerRef}>
+	<!-- <PostSEO {post} /> -->
+	<Container>
 		<TitleBar
 			backButton={true}
 			globalMenu={false}
 			backButtonHref="/writing"
 			magicTitle={true}
-			title={post.title}
-			bind:titleRef
+			title={journalQuery.state.data}
+			trailingAccessory={postActions}
 			{scrollContainerRef}
 		/>
 
-		<Detail.ContentContainer>
-			<Detail.Header>
-				{#if post.slug !== 'campsite'}
-					<div class="mb-6 flex justify-center md:mb-12">
-						<div class="mx-auto w-full max-w-3xl">
-							<Campsite referrer="/post" />
-						</div>
-					</div>
+		<ContentContainer>
+			<Header>
+				<h1 class="text-primary font-sans text-2xl font-bold xl:text-3xl">
+					{journalQuery.state.data['journal-entries'][0].title}
+				</h1>
+				{#if publishedAt}
+					<span title={publishedAt.raw} class="text-tertiary inline-block leading-snug">
+						{publishedAt.formatted}
+					</span>
 				{/if}
-				<Detail.Title bind:this={titleRef}>{post.title}</Detail.Title>
-				<span title={publishedAt.raw} class="text-tertiary inline-block leading-snug">
-					{publishedAt.formatted}
-				</span>
-			</Detail.Header>
+			</Header>
 
-			<MarkdownRenderer class="prose mt-8">
-				{post.text}
-			</MarkdownRenderer>
+			<div class="prose mt-8">
+				{@html marked.parse(journalQuery.state.data['journal-entries'][0].text)}
+			</div>
 
 			<!-- bottom padding to give space between post content and comments -->
-			<div class="py-6" />
-		</Detail.ContentContainer>
-	</Detail.Container>
+			<div class="py-6"></div>
+		</ContentContainer>
+	</Container>
 {/if}
+
+{#snippet postActions()}
+	<JournalActions journalEntry={journalQuery.state.data['journal-entries'][0]} />
+{/snippet}

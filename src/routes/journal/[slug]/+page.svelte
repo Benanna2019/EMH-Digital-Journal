@@ -8,12 +8,28 @@
 	import { journalEntryQuery } from '$lib/instantdb/queries';
 	import { db } from '$lib/instantdb/db';
 	import { useQuery } from '$lib/instantdb/useQuery.svelte';
+	import { getEditorState, setEditorState } from '$lib/store/JournalEditorContext.svelte';
 
-	let slug = $page.params.slug;
+	let slug = $derived($page.params.slug);
 
-	let entryQuery = journalEntryQuery(slug);
+	let journalData = $state(null);
+	let editorContext = $state({});
+	let journalQuery = $state<any>({ state: { data: null } });
 
-	let journalQuery = useQuery(db, entryQuery);
+	$effect(() => {
+		let { query } = journalEntryQuery(slug);
+		journalQuery = useQuery(db, query);
+	});
+
+	$effect(() => {
+		if (journalQuery && journalQuery.state.data) {
+			journalData = journalQuery.state.data['journal-entries'][0];
+			if (journalData) {
+				setEditorState(journalData);
+				editorContext = getEditorState();
+			}
+		}
+	});
 </script>
 
 {#snippet list()}
@@ -21,10 +37,10 @@
 {/snippet}
 
 {#snippet detail()}
-	{#if journalQuery.state.data && !journalQuery.state.data.publishedAt}
-		<JournalEditor {slug} />
-	{:else}
-		<JournalDetail {slug} />
+	{#if journalQuery.state.data && !journalQuery.state.data['journal-entries'][0].publishedAt}
+		<JournalEditor journalEntry={journalQuery.state.data['journal-entries'][0]} />
+	{:else if journalQuery.state.data}
+		<JournalDetail slug={journalQuery.state.data['journal-entries'][0].slug} />
 	{/if}
 {/snippet}
 

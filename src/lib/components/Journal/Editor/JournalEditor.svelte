@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { setContext } from 'svelte';
 	import Container from '$lib/components/ListDetail/Detail/Container.svelte';
 	import TitleBar from '$lib/components/ListDetail/TitleBar.svelte';
 	import JournalEditorActions from './JournalEditorActions.svelte';
@@ -7,21 +6,15 @@
 	import JournalEditorMetaSidebar from './JournalEditorMetaSidebar.svelte';
 	import JournalEditorPreview from './JournalEditorPreview.svelte';
 	import PreviewSwitch from './PreviewSwitch.svelte';
-	import { db } from '$lib/instantdb/db';
-	import { useAuth } from '$lib/instantdb/useAuth.svelte';
-	import { useQuery } from '$lib/instantdb/useQuery.svelte';
-	import { journalEntryQuery } from '$lib/instantdb/queries';
-	import { getEditorState, setEditorState } from '$lib/store/PostEditorContext.svelte';
+	import { getEditorState, setEditorState } from '$lib/store/JournalEditorContext.svelte';
 
-	// should probably get this off of the url
-	let { slug }: { slug: string } = $props();
+	let { journalEntry }: { journalEntry?: any } = $props();
 
-	const entryQuery = journalEntryQuery(slug);
-	let journalQuery = useQuery(db, entryQuery);
+	if (journalEntry) {
+		setEditorState(journalEntry);
+	}
 
-	const editorContext = getEditorState();
-
-	console.log('editorContext in journal editor: ', editorContext);
+	let editorContext = getEditorState();
 </script>
 
 {#snippet postEditorActions()}
@@ -36,13 +29,13 @@
 	<TitleBar
 		backButton={true}
 		globalMenu={false}
-		backButtonHref="/writing"
+		backButtonHref="/journal"
 		title=""
 		trailingAccessory={postEditorActions}
 		leadingAccessory={previewSwitch}
 	/>
 
-	{#if editorContext.getIsPreviewing()}
+	{#if editorContext?.getIsPreviewing()}
 		<JournalEditorPreview />
 	{:else}
 		<JournalEditorComposer />

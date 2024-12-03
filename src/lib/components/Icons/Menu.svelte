@@ -1,13 +1,4 @@
-<script>
-	import { onMount } from 'svelte';
-
-	onMount(() => {
-		console.log('menu mounted');
-	});
-</script>
-
-	<!-- should look into tab indexes because I think this means whenever they press the tab they will navigate there -->
-
+<!-- should look into tab indexes because I think this means whenever they press the tab they will navigate there -->
 
 <svg
 	xmlns="http://www.w3.org/2000/svg"
@@ -18,8 +9,6 @@
 	stroke-width="1.5"
 	stroke="currentColor"
 	class="h-6 w-6 lg:hidden"
-	onclick={() => console.log('clicked')}
-	onkeypress={() => console.log('keypressed')}
 >
 	<path
 		stroke-linecap="round"

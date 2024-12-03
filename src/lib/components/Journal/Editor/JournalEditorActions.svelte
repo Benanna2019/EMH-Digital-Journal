@@ -1,39 +1,61 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { SidebarIcon } from 'svelte-feather-icons';
+	import { page } from '$app/stores';
 
 	import Button from '$lib/components/Buttons/Button.svelte';
 	import LoadingSpinner from '$lib/components/LoadingSpinner.svelte';
 	import PostEditorAutoSave from './JournalEditorAutoSave.svelte';
 
-	import { getEditorState } from '$lib/store/PostEditorContext.svelte';
+	import { getEditorState } from '$lib/store/JournalEditorContext.svelte';
 	import { addJournalEntry, editJournalEntry } from '$lib/instantdb/mutations';
+	import { getToastState } from '$lib/store/ToastContext.svelte';
+	import { db } from '$lib/instantdb/db';
+	import { useUser } from '$lib/instantdb/useUser.svelte';
 
 	let editorContext = getEditorState();
 
 	let isSavingDraft = $state(false);
+	let toastState = getToastState();
+
+	let userQuery = useUser(db);
 
 	async function handleEditOrCreate() {
 		isSavingDraft = true;
+		let status: 'draft' | 'published' | undefined;
+		if ($page.url.pathname.includes('/edit')) {
+			status = editorContext.getExistingJournalEntry().status;
+		}
 		try {
-			if (editorContext.existingPost?.id) {
-				editJournalEntry(editorContext.existingPost.id, editorContext.draftState);
+			console.log('starting save');
+			if (editorContext.existingJournalEntry?.id) {
+				console.log('saving existing journal entry');
+				editJournalEntry(
+					editorContext.existingJournalEntry.id,
+					editorContext.draftState,
+					status || 'draft'
+				);
+				toastState.add('Draft updated', 'Your draft has been updated');
 			} else {
-				const newPost = await addJournalEntry(editorContext.draftState);
-				// find a better toast solution
-				// toast.success('Draft created');
-				goto(`/journal/${newPost.slug}/edit`);
+				console.log('adding new journal entry');
+				const newPost = await addJournalEntry(
+					editorContext.draftState,
+					userQuery.state.userData.id
+				);
+				console.log('new post: ', newPost);
+				toastState.add('Draft created', 'Your draft has been created');
+				// change this to go to the edit page once that route is made
+				goto(`/journal/${newPost.slug}`);
 			}
 		} catch (error) {
-			// find a better toast solution
-			// toast.error('Failed to save post');
+			console.error('error: ', error);
+			toastState.add('Failed to save post', 'Please try again');
 		} finally {
 			isSavingDraft = false;
 		}
 	}
 
 	function toggleSidebar() {
-		console.log('toggle has been toggled');
 		editorContext.toggleSidebar();
 	}
 </script>
@@ -44,7 +66,7 @@
 			<LoadingSpinner />
 		{:else}
 			<PostEditorAutoSave />
-			<span>{editorContext.existingPost?.publishedAt ? 'Update' : 'Save draft'}</span>
+			<span>{editorContext?.existingJournalEntry?.publishedAt ? 'Update' : 'Save draft'}</span>
 		{/if}
 	</Button>
 	<Button onclick={toggleSidebar}>

@@ -13,10 +13,6 @@
 
 	let { filter }: { filter: 'published' | 'draft' } = $props();
 
-	function handleFilterChange(filter: string) {
-		filter = filter === 'published' ? 'draft' : 'published';
-	}
-
 	let auth = useAuth(db);
 </script>
 
@@ -32,7 +28,6 @@
 	{#if auth.state.user}
 		<div class="pb-1 pt-2">
 			<SegmentedControl
-				onSetActiveItem={handleFilterChange}
 				active={filter}
 				items={[
 					{ id: 'published', label: 'Published' },

@@ -2,7 +2,7 @@
 	import ListDetailView from '$lib/components/Layout/ListDetailView.svelte';
 	import SiteLayout from '$lib/components/Layout/SiteLayout.svelte';
 	import JournalEditor from '$lib/components/Journal/Editor/JournalEditor.svelte';
-	import { setEditorState } from '$lib/store/PostEditorContext.svelte';
+	import { setEditorState } from '$lib/store/JournalEditorContext.svelte';
 
 	setEditorState();
 </script>

@@ -4,7 +4,6 @@
 	import UserProfileDialog from '../UserProfileDialog.svelte';
 	import { db, id, tx } from '$lib/instantdb/db';
 	import { onMount } from 'svelte';
-	import { useAuth } from '$lib/instantdb/useAuth.svelte';
 	import { useUser } from '$lib/instantdb/useUser.svelte';
 	import Container from '../ListDetail/Detail/Container.svelte';
 	import LoadingSpinner from '../LoadingSpinner.svelte';
@@ -23,23 +22,7 @@
 	let renderMagicCodePage = $state(false);
 	let email = $state('');
 
-	// let user: User | null = $state(null);
-
-	const auth = useAuth(db);
-
 	let user = useUser(db);
-
-	// const userQuery = useQuery(db, userByAuthId());
-
-	// $effect(() => {
-	// 	if (auth.state.user) {
-	// 		const { query } = userByAuthIdQuery(auth.state.user.id);
-	// 		const userQuery = useQuery(db, query);
-	// 		$inspect('userQuery', userQuery.state.data);
-	// 		user = auth.state.user;
-	// 		authInitialized = true;
-	// 	}
-	// });
 
 	function handleSignOut() {
 		db.auth.signOut();
@@ -69,7 +52,6 @@
 		const code = form.code.value || '';
 		try {
 			let response = await db.auth.signInWithMagicCode({ email, code });
-			console.log('response: ', response);
 			if (response.user) {
 				db.transact([
 					tx.users[id()].update({

@@ -6,32 +6,35 @@
 	import JournalTitlebar from './JournalTitlebar.svelte';
 	import { db } from '$lib/instantdb/db';
 	import { useQuery } from '$lib/instantdb/useQuery.svelte';
-
-	// rename templates in the db as entries
-	// actually, keep templates but entries should probably replace templates
-	// in this file.
-
-	// The templates are solely for writing a new entry and using a template
-	// to get the user started.
+	import { getFilterState } from '$lib/store/JournalEditorContext.svelte';
 
 	let active = $state(false);
-	let filter = $state<'published' | 'draft'>('published');
 
-	const journalEntries = useQuery(db, { 'journal-entries': {} });
+	let filterState = getFilterState();
+	let filter = $derived(filterState.getFilter());
 
-	$inspect(journalEntries);
+	let journalData = $state([]);
+	let journalEntries = $state<any>({
+		state: { isLoading: true, error: { message: '' }, data: null }
+	});
 
-	function toggleFilter() {
-		filter = filter === 'published' ? 'draft' : 'published';
-	}
+	$effect(() => {
+		journalEntries = useQuery(db, {
+			'journal-entries': {
+				$: {
+					where: {
+						status: filter
+					}
+				}
+			}
+		});
+	});
 
-	// const variables =
-	// 	filter === 'published' ? { filter: { published: true } } : { filter: { published: false } };
-
-	// probably need to iterate over templates since itll be an array
-	// if (templates.length > 0) {
-	// 	active = $page.url?.pathname === templates.slug;
-	// }
+	$effect(() => {
+		if (journalEntries.state.data) {
+			journalData = journalEntries.state.data['journal-entries'];
+		}
+	});
 </script>
 
 {#if journalEntries.state.isLoading}
@@ -48,7 +51,7 @@
 			<p>{journalEntries.state.error.message}</p>
 		</div>
 	</ListContainer>
-{:else if journalEntries.state?.data?.length === 0}
+{:else if journalEntries.state?.data?.['journal-entries'].length === 0}
 	<ListContainer>
 		<JournalTitlebar {filter} />
 		<div class="flex flex-1 items-center justify-center">
@@ -60,8 +63,8 @@
 		<JournalTitlebar {filter} />
 
 		<div class="lg:space-y-1 lg:p-3">
-			{#each journalEntries.state.data as entry}
-				<JournalListItem post={entry} {active} />
+			{#each journalEntries.state.data['journal-entries'] as entry}
+				<JournalListItem {entry} {active} />
 			{/each}
 		</div>
 	</ListContainer>

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { getEditorState } from '$lib/store/PostEditorContext.svelte';
+	import { getEditorState } from '$lib/store/JournalEditorContext.svelte';
 
 	let { label } = $props<{
 		label: string;
@@ -18,7 +18,11 @@
 			<span class="label-text mr-2">{label}</span>
 		{/if}
 		<div class="switch">
-			<input type="checkbox" checked={editorContext.isPreviewing} onchange={togglePreview} />
+			<input
+				type="checkbox"
+				checked={editorContext?.isPreviewing || false}
+				onchange={togglePreview}
+			/>
 			<span class="slider round"></span>
 		</div>
 	</label>

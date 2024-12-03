@@ -1,5 +1,8 @@
 <script lang="ts">
-	let { list, hasDetail, detail }: any = $props();
+	import type { Snippet } from 'svelte';
+
+	let { list, hasDetail, detail }: { list: Snippet; hasDetail: boolean; detail: Snippet } =
+		$props();
 </script>
 
 <div class="flex w-full">
